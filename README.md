@@ -1,5 +1,5 @@
 # kubernetes-development-environment-in-a-box
-This project produces an AWS AMI image that can run an EC2 machine that has Docker and multiple isolated Kubernetes clusters running in it.  The main use case is to setup one node that can run multiple fully isolated Kubernetes cluster on it for development purposes.
+This project produces an AMI image that can run an instance that has Docker and multiple isolated Kubernetes clusters running in it.  The main use case is to setup one node that can run multiple fully isolated Kubernetes cluster on it for development purposes.
 
 ## What this box has
 This box has multiple items in it to help facilitate creating multiple Kubernetes cluster on a single machine.
