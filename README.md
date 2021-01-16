@@ -4,6 +4,7 @@ This project produces an AWS AMI image that can run an EC2 machine that has Dock
 ## What this box has
 This box has multiple items in it to help facilitate creating multiple Kubernetes cluster on a single machine.
 
+```
 +-----+  +-----+ +-----+  +-----+ +-----+ +-----+ +---------+ +-----------+
 | Pod |  | Pod | | Pod |  |Pod  | |Pod  | |Pod  | |         | |           |
 |     |  |     | |     |  |     | |     | |     | |         | |           |
@@ -38,7 +39,7 @@ This box has multiple items in it to help facilitate creating multiple Kubernete
 +-------------------------------------------------------------------------+
 |                 Cloud                                                   |
 +-------------------------------------------------------------------------+
-
+```
 
 Starting from the bottom up.
 
