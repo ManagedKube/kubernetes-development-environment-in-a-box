@@ -1,0 +1,77 @@
+{
+    "variables": {
+      "vpc": "{{env `BUILD_VPC_ID`}}",
+      "subnet": "{{env `BUILD_SUBNET_ID`}}",
+      "aws_region": "{{env `AWS_REGION`}}",
+      "ami_name": "managedkube-kops-{{isotime \"2006-01-02-03-04-05\"}}",
+      "source_repo": "ami-lifcycle",
+      "source_location": "aws/kops",
+      "instance_type": "t2.large",
+      "ssh_username": "ec2-user",
+      "ami_description": "Amazon Linux 2 | An AMI for Kops usage"
+    },
+    "builders": [{
+      "name": "AWS AMI Builder",
+      "type": "amazon-ebs",
+      "region": "{{user `aws_region`}}",
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "name": "amzn2-ami-hvm-2.0.202003*-gp2",
+          "root-device-type": "ebs"
+        },
+        "owners": ["137112412989", "591542846629", "801119661308",
+          "102837901569", "013907871322", "206029621532",
+          "286198878708", "443319210888"
+        ],
+        "most_recent": true
+      },
+      "ami_regions": [
+        "{{user `aws_region`}}"
+      ],
+      "instance_type": "{{user `instance_type`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ami_name": "{{user `ami_name` }}",
+      "encrypt_boot": true,
+      "tags": {
+        "Name": "{{user `ami_name`}}",
+        "source_repo": "{{user `source_repo`}}",
+        "source_location": "{{user `source_location`}}"
+      },
+      "run_tags": {
+        "Name": "{{user `ami_name`}}"
+      },
+      "run_volume_tags": {
+        "Name": "{{user `ami_name`}}"
+      },
+      "snapshot_tags": {
+        "Name": "{{user `ami_name`}}"
+      },
+      "ami_description": "{{user `ami_description`}}",
+      "associate_public_ip_address": "true",
+      "vpc_id": "{{user `vpc`}}",
+      "subnet_id": "{{user `subnet`}}"
+    }],
+    "provisioners": [
+      {
+        "type": "shell",
+        "inline": [
+          "cd /tmp",
+          "sudo yum update -y",
+          "# 9/2020: Installing AWS Inspector: https://docs.aws.amazon.com/inspector/latest/userguide/inspector_installing-uninstalling-agents.html#install-linux",
+          "cd /tmp",
+          "wget https://inspector-agent.amazonaws.com/linux/latest/install",
+          "chmod 755 install",
+          "sudo ./install",
+          "sudo /opt/aws/awsagent/bin/awsagent status",
+        ]
+      },
+      {
+        "type": "shell",
+        "inline": [
+          "rm .ssh/authorized_keys ; sudo rm /root/.ssh/authorized_keys"
+        ]
+      }
+    ]
+  }
+  
