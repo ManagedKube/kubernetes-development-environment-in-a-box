@@ -1,5 +1,5 @@
 # kubernetes-development-environment-in-a-box
-This project produces an AMI image that can run an instance that has Docker and multiple isolated Kubernetes clusters running in it.  The main use case is to setup one node that can run multiple fully isolated Kubernetes cluster on it for development purposes.
+This project produces an AMI image that can run an instance that has Docker and multiple isolated Kubernetes clusters running in it using [KinD](https://github.com/kubernetes-sigs/kind).  The main use case is to setup one node that can run multiple fully isolated Kubernetes cluster on it for development purposes.
 
 ## What this box has
 This box has multiple items in it to help facilitate creating multiple Kubernetes cluster on a single machine.
@@ -58,7 +58,7 @@ https://github.com/nestybox/sysbox
 
 "Sysbox is an open-source container runtime (aka runc), originally developed by Nestybox, that enables Docker containers to act as virtual servers capable of running software such as Systemd, Docker, and Kubernetes in them, easily and with proper isolation. This allows you to use containers in new ways, and provides a faster, more efficient, and more portable alternative to virtual machines in many scenarios."
 
-We are using this as the Docker isolation layer/tool which allows us to run fully isolated Docker container on this single machine.  This is really where the isolation magic is happening here.  Everything else is just managment glue to make everything work.  This allows us to spin up any number of Ubuntu Docker container on this machine which looks likes VMs.  The Ubuntu Docker image we spin up has Docker installed inside of it and KinD CLI which allows us to spin up Kubernetes clusters in this Docker container.
+We are using this as the Docker isolation layer/tool which allows us to run fully isolated Docker container on this single machine.  This is really where the isolation magic is happening here.  Everything else is just managment glue to make everything work.  This allows us to spin up any number of Ubuntu Docker container on this machine which looks likes VMs.  The Ubuntu Docker image we spin up has Docker installed inside of it and [KinD](https://github.com/kubernetes-sigs/kind) CLI which allows us to spin up Kubernetes clusters in this Docker container.
 
 5) Management Layer
 The management layer is a set of scripts and proccesses to facilitate spinning up and down Kubernetes clusters on this machine.  This is the glue that puts everything together.
