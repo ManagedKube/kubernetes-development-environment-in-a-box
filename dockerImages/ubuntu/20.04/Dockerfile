@@ -1,5 +1,26 @@
 FROM ubuntu:20.04
 
+RUN apt-get update
+
+# Install Docker
+# Doc: https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+RUN apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+
+RUN add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+
+RUN apt-get update
+RUN apt-get install -y docker-ce docker-ce-cli containerd.io
+
 # Input args
 ARG kubectl_version="installing the latest"
 ARG terraform_version="0.13.3"
@@ -16,29 +37,29 @@ ENV KIND_VERSION=$kind_version
 
 # Update the base image and install base items
 RUN apt-get update
-RUN apt-get install vim wget curl ssh
+RUN apt-get install -y vim wget curl ssh zip
 
 # Install kubectl
-RUN apt-get update && sudo apt-get install -y apt-transport-https gnupg2 curl
-RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-RUN echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+RUN apt-get update && apt-get install -y apt-transport-https gnupg2 curl
+RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+RUN echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list
 RUN apt-get update
 RUN apt-get install -y kubectl
 
 # Install Terraform
 WORKDIR /tmp
-RUN wget https://releases.hashicorp.com/terraform/$TERRAFORM_VERSION/terraform_$TERRAFORM_VERSION_linux_amd64.zip
-RUN unzip terraform_$TERRAFORM_VERSION_linux_amd64.zip
+RUN wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+RUN unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 RUN cp /tmp/terraform /usr/local/bin/terraform
 
 # Install Terragrunt
-RUN wget https://github.com/gruntwork-io/terragrunt/releases/download/v$TERRAGRUNT_VERSION/terragrunt_linux_amd64
+RUN wget https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64
 RUN chmod 755 ./terragrunt_linux_amd64
 RUN cp terragrunt_linux_amd64 /usr/local/bin/terragrunt
 
 # Install saml2aws
-RUN wget https://github.com/Versent/saml2aws/releases/download/v$SAML2AWS_VERSION/saml2aws_$SAML2AWS_VERSION_linux_amd64.tar.gz
-RUN tar -zxvf saml2aws_$SAML2AWS_VERSION_linux_amd64.tar.gz
+RUN wget https://github.com/Versent/saml2aws/releases/download/v${SAML2AWS_VERSION}/saml2aws_${SAML2AWS_VERSION}_linux_amd64.tar.gz
+RUN tar -zxvf saml2aws_${SAML2AWS_VERSION}_linux_amd64.tar.gz
 RUN cp saml2aws /usr/local/bin/saml2aws
 
 # Install aws cli
