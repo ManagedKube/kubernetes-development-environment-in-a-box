@@ -28,16 +28,26 @@ ARG terragrunt_version="0.26.7"
 ARG aws_cli_version="installing the latest"
 ARG saml2aws_version="2.27.1"
 ARG kind_version="v0.7.0"
+ARG golang_version="1.15.7"
 
 # Envars
 ENV TERRAFORM_VERSION=$terraform_version
 ENV TERRAGRUNT_VERSION=$terragrunt_version
 ENV SAML2AWS_VERSION=$saml2aws_version
 ENV KIND_VERSION=$kind_version
+ENV GOLANG_VERSION=$golang_version
 
 # Update the base image and install base items
 RUN apt-get update
-RUN apt-get install -y vim wget curl ssh zip
+RUN apt-get install -y vim wget curl ssh zip build-essential
+
+# Working dir
+WORKDIR /tmp
+
+# Install golang
+RUN wget https://golang.org/dl/go${GOLANG_VERSION}.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go${GOLANG_VERSION}.linux-amd64.tar.gz
+ENV PATH "$PATH:/usr/local/go/bin"
 
 # Install kubectl
 RUN apt-get update && apt-get install -y apt-transport-https gnupg2 curl
@@ -47,7 +57,6 @@ RUN apt-get update
 RUN apt-get install -y kubectl
 
 # Install Terraform
-WORKDIR /tmp
 RUN wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 RUN unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 RUN cp /tmp/terraform /usr/local/bin/terraform
@@ -58,9 +67,9 @@ RUN chmod 755 ./terragrunt_linux_amd64
 RUN cp terragrunt_linux_amd64 /usr/local/bin/terragrunt
 
 # Install saml2aws
-RUN wget https://github.com/Versent/saml2aws/releases/download/v${SAML2AWS_VERSION}/saml2aws_${SAML2AWS_VERSION}_linux_amd64.tar.gz
-RUN tar -zxvf saml2aws_${SAML2AWS_VERSION}_linux_amd64.tar.gz
-RUN cp saml2aws /usr/local/bin/saml2aws
+# RUN wget https://github.com/Versent/saml2aws/releases/download/v${SAML2AWS_VERSION}/saml2aws_${SAML2AWS_VERSION}_linux_amd64.tar.gz
+# RUN tar -zxvf saml2aws_${SAML2AWS_VERSION}_linux_amd64.tar.gz
+# RUN cp saml2aws /usr/local/bin/saml2aws
 
 # Install aws cli
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
