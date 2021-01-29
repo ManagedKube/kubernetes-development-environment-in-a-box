@@ -13,7 +13,7 @@ DEV_INSTANCE_IMAGE=managekube/dev-box-ubuntu:0.0.5
 DEV_INSTANCE_NAME=dev-1
 DEV_INSTANCE_SSH_PORT=20021
 USERS_PUBLIC_SSH_KEY="ssh-rsa AAAAB3NzaC1yc2E....."
-DEV_INSTANCE_PUBLIC_IP=18.232.178.23
+DEV_INSTANCE_PUBLIC_IP=dev-box-1.managedkube.com
 ```
 
 Start a dev-box container:
