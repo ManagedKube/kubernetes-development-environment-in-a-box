@@ -82,3 +82,7 @@ RUN ./aws/install
 # Install KinD
 RUN curl https://github.com/kubernetes-sigs/kind/releases/download/${KIND_VERSION}/kind-linux-amd64 -o /usr/local/bin/kind -L
 RUN chmod +x /usr/local/bin/kind
+
+ADD ./run.sh /run.sh
+
+ENTRYPOINT [ "/run.sh" ]
