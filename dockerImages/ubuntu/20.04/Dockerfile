@@ -41,6 +41,9 @@ ENV GOLANG_VERSION=$golang_version
 RUN apt-get update
 RUN apt-get install -y vim wget curl ssh zip build-essential git bash-completion
 
+# Add bash auto completion
+RUN echo "source /etc/profile.d/bash_completion.sh" >> ~/.bashrc
+
 # Working dir
 WORKDIR /tmp
 
