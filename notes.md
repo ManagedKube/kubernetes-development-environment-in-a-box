@@ -34,12 +34,43 @@ Add private key to your ssh agent:
 ```
 ssh-add <path to your private ssh key>
 ```
+* This should be the private key you are going to use to log into the dev box
+* This should be the private key you are authenticating to Github with, You can also add more keys to your ssh agent if you are using different keys.
 
 SSH into their instance:
-
 ```
 ssh root@${DEV_INSTANCE_PUBLIC_IP} -p ${DEV_INSTANCE_SSH_PORT}
 ```
+
+Add host into VScode:
+* Install the "Remote - SSH" extension
+* On the lower left of the VScode window click on "Open Remote Window"
+* Click on: Remote-SSH: Connect to Host...
+* + Add New SSH Host...
+* Add: ssh root@<IP Address> -A -p 20021
+* On the lower left of the VScode window click on "Open Remote Window"
+* Click on: Remote-SSH: Open Configuration File...
+* Select the `/home/<home folder>/.ssh/config` file
+* Find this host:
+```
+Host 10.10.10.10
+	HostName 10.10.10.10
+	User root
+	Port 20022
+	ForwardAgent yes
+```
+* Rename `Host 10.10.10.10` to `Host my-dev-box` or a human recognizable name for yourself and save the file
+* Click on: Remote-SSH: Connect to Host...
+* Click on: Remote-SSH: Connect to Host...
+* Click on the host you just added and/or renamed.  A new VScode window will open up and it will connect to this host.
+* In the new window, click on Terminal->New Terminal
+* In the terminal
+* `cd /home`
+* git clone <Git repo URI>
+* In VScode, on the top left click on the "Explorer" icon
+* Click on "Open Folder"
+* A box will appear asking for the path, put in: `/home/<Git repo>`. 
+* VScode will reload and the Explorer will show the files of the Git repo you have just cloned.  These files are on the remote server but it appears in your VScode like they are local files.
 
 
 
