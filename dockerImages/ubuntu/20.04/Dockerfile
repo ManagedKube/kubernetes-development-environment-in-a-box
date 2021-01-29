@@ -39,7 +39,7 @@ ENV GOLANG_VERSION=$golang_version
 
 # Update the base image and install base items
 RUN apt-get update
-RUN apt-get install -y vim wget curl ssh zip build-essential
+RUN apt-get install -y vim wget curl ssh zip build-essential git bash-completion
 
 # Working dir
 WORKDIR /tmp
@@ -48,6 +48,9 @@ WORKDIR /tmp
 RUN wget https://golang.org/dl/go${GOLANG_VERSION}.linux-amd64.tar.gz
 RUN tar -C /usr/local -xzf go${GOLANG_VERSION}.linux-amd64.tar.gz
 ENV PATH "$PATH:/usr/local/go/bin"
+RUN echo "export PATH=/usr/local/go/bin:$PATH" >> /root/.bashrc
+RUN go get golang.org/x/tools/gopls
+RUN go get -v github.com/go-delve/delve/cmd/dlv
 
 # Install kubectl
 RUN apt-get update && apt-get install -y apt-transport-https gnupg2 curl
