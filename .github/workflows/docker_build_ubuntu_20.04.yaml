@@ -37,10 +37,7 @@ jobs:
           push: true
           tags: managekube/dev-box-ubuntu-20-04:${{ env.BRANCH }}
           build-args: |
-            # BRANCH=${{ env.GITHUB_REF }}
-            BRANCH=foo2
-            arg1=value1
-            arg2=value2
+            BRANCH=${{ env.BRANCH }}
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
