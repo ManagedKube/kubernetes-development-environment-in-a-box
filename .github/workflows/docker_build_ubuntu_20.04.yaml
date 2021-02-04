@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       -
-        name: What
+        name: Set branch env
         run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV      
       -
         name: Set up QEMU
