@@ -35,6 +35,9 @@ jobs:
       # build artifact
       - name: Build Artifact
         uses: operatehappy/packer-github-actions@master
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         with:
           command: build
           arguments: "-color=false -on-error=abort"
