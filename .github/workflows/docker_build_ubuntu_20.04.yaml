@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       -
-          name: What
-          run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV      
+        name: What
+        run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV      
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
