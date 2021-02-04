@@ -26,7 +26,7 @@ jobs:
         with:
           file: ./dockerImages/ubuntu/20.04/Dockerfile
           push: true
-          tags: managekube/dev-box-ubuntu-20-04:$CI_REF_NAME
+          tags: managekube/dev-box-ubuntu-20-04:$GITHUB_REF
           build-args: |
             arg1=value1
             arg2=value2
