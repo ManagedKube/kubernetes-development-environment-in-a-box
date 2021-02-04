@@ -1,0 +1,50 @@
+---
+
+name: Packer
+
+# on:
+#   push:
+on:
+  release:
+    types: [created]
+
+jobs:
+  packer:
+    runs-on: ubuntu-latest
+    name: packer
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      # fix backwards incompatibilities in template
+      # - name: Fix Template
+      #   uses: operatehappy/packer-github-actions@master
+      #   with:
+      #     command: fix
+
+      # validate templates
+      - name: Validate Template
+        uses: operatehappy/packer-github-actions@master
+        with:
+          command: validate
+          arguments: -syntax-only
+          working_directory: ./cloud/aws/ami/ubuntu/20.04
+          target: packer.json
+
+      # build artifact
+      - name: Build Artifact
+        uses: operatehappy/packer-github-actions@master
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          BUILD_VPC_ID: "vpc-06fd30fb9a086b95d"
+          BUILD_SUBNET_ID: "subnet-0c7b0058c2220a2b0"
+          AWS_REGION: "us-east-1"
+        with:
+          command: build
+          arguments: "-color=false -on-error=abort"
+          working_directory: ./cloud/aws/ami/ubuntu/20.04
+          target: packer.json
+
+      # additional steps to process artifacts
