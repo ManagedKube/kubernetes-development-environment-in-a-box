@@ -2,11 +2,11 @@
 
 name: Packer
 
-on:
-  push:
 # on:
-#   release:
-#     types: [created]
+#   push:
+on:
+  release:
+    types: [created]
 
 jobs:
   packer:
