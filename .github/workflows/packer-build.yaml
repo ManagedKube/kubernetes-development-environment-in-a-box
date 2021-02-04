@@ -29,7 +29,8 @@ jobs:
         with:
           command: validate
           arguments: -syntax-only
-          target: ./cloud/aws/ami/ubuntu/20.04/packer.json
+          working_directory: ./cloud/aws/ami/ubuntu/20.04
+          target: packer.json
 
       # build artifact
       - name: Build Artifact
@@ -37,6 +38,7 @@ jobs:
         with:
           command: build
           arguments: "-color=false -on-error=abort"
-          target: ./cloud/aws/ami/ubuntu/20.04/packer.json
+          working_directory: ./cloud/aws/ami/ubuntu/20.04
+          target: packer.json
 
       # additional steps to process artifacts
