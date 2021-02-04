@@ -6,12 +6,14 @@ on:
       - '**'
     tags:
       - 'v*.*.*'
-  pull_request:
 
 jobs:
   main:
     runs-on: ubuntu-latest
     steps:
+      -
+        name: Set branch env
+        run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV      
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -29,12 +31,12 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
+          # context: ./dockerImages/ubuntu/20.04
           file: ./dockerImages/ubuntu/20.04/Dockerfile
           push: true
-          tags: managekube/dev-box-ubuntu-20-04:${{ GITHUB_REF }}
+          tags: managekube/dev-box-ubuntu-20-04:${{ env.BRANCH }}
           build-args: |
-            arg1=value1
-            arg2=value2
+            BRANCH=${{ env.BRANCH }}
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
