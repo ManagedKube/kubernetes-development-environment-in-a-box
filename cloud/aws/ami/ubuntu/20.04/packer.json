@@ -4,11 +4,11 @@
       "subnet": "{{env `BUILD_SUBNET_ID`}}",
       "aws_region": "{{env `AWS_REGION`}}",
       "ami_name": "managedkube-kops-{{isotime \"2006-01-02-03-04-05\"}}",
-      "source_repo": "ami-lifcycle",
-      "source_location": "aws/kops",
+      "source_repo": "kubernetes-development-environment-in-a-box",
+      "source_location": "cloud/aws/ami/ubuntu/20.04",
       "instance_type": "t2.large",
-      "ssh_username": "ec2-user",
-      "ami_description": "Amazon Linux 2 | An AMI for Kops usage"
+      "ssh_username": "ubuntu",
+      "ami_description": "Ubuntu 20.04"
     },
     "builders": [{
       "name": "AWS AMI Builder",
@@ -17,13 +17,12 @@
       "source_ami_filter": {
         "filters": {
           "virtualization-type": "hvm",
-          "name": "amzn2-ami-hvm-2.0.202003*-gp2",
+          "architecture": "x86_64",
+          "name": "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20210119.*",
+          "block-device-mapping.volume-type": "gp2",
           "root-device-type": "ebs"
         },
-        "owners": ["137112412989", "591542846629", "801119661308",
-          "102837901569", "013907871322", "206029621532",
-          "286198878708", "443319210888"
-        ],
+        "owners": ["099720109477"],
         "most_recent": true
       },
       "ami_regions": [
@@ -54,19 +53,36 @@
     }],
     "provisioners": [
       {
+        "type": "file",
+        "source": "./ami-ssh-key.pub",
+        "destination": "/tmp/ami-ssh-key.pub"
+      },
+      {
         "type": "shell",
         "inline": [
+          "cat /tmp/ami-ssh-key.pub >> ~/.ssh/authorized_keys",
           "cd /tmp",
-          "sudo yum update -y",
-          "# 9/2020: Installing AWS Inspector: https://docs.aws.amazon.com/inspector/latest/userguide/inspector_installing-uninstalling-agents.html#install-linux",
-          "cd /tmp",
-          "wget https://inspector-agent.amazonaws.com/linux/latest/install",
-          "chmod 755 install",
-          "sudo ./install",
-          "sudo /opt/aws/awsagent/bin/awsagent status",
+          "sudo apt-get update",
+          "#sudo apt-get upgrade -y",
+          "# sudo apt-get dist-upgrade -y",
+          "# Installing AWS Inspector: https://docs.aws.amazon.com/inspector/latest/userguide/inspector_installing-uninstalling-agents.html#install-linux",
+          "# wget https://inspector-agent.amazonaws.com/linux/latest/install",
+          "# chmod 755 install",
+          "# sudo ./install",
+          "# sudo /opt/aws/awsagent/bin/awsagent status",
+          "# Install Docker",
+          "sudo apt-get install -y apt-transport-https ca-certificates",
+          "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -",
+          "sudo add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"",
+          "sudo apt-get update",
+          "# echo 'Docker version list'",
+          "sudo apt-cache madison docker-ce",
+          "sudo apt-get install -y docker-ce=5:20.10.3~3-0~ubuntu-focal docker-ce-cli=5:20.10.3~3-0~ubuntu-focal containerd.io",
+          "sudo usermod -aG docker ubuntu",
           "# Install nestybox/sysbox",
+          "# Fixing docker userns-remap setting: https://github.com/nestybox/sysbox/blob/master/docs/user-guide/install.md#docker-userns-remap",
           "wget https://github.com/nestybox/sysbox/releases/download/v0.2.1/sysbox_0.2.1-0.ubuntu-focal_amd64.deb",
-          "apt-get install ./sysbox_0.2.1-0.ubuntu-focal_amd64.deb -y",
+          "sudo DEBIAN_FRONTEND=noninteractive apt-get install ./sysbox_0.2.1-0.ubuntu-focal_amd64.deb -y"
         ]
       },
       {

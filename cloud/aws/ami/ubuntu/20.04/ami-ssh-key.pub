@@ -1,0 +1,1 @@
+# Place your ssh public key in here.  This will be copied over to the AMI that is being built.  This is a good way to troubleshoot AMI builds.

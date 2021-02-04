@@ -95,3 +95,14 @@ VScode
 Kubeconfig
 * You will need a kubeconfig at: `/root/.kube/config`
 
+
+
+
+
+
+
+* kubectl bash completion
+* helm
+  * and helm bash completion
+* Bash prompt with git branch
+
