@@ -28,7 +28,10 @@ docker exec ${DEV_INSTANCE_NAME} /bin/bash -c "echo ${USERS_PUBLIC_SSH_KEY} >> /
 ```
 
 
-## User
+## User Process
+As a user, this gives you a Linux server where you can SSH into and develop on.
+
+### Test out your connection to your dev instnace:
 
 Add private key to your ssh agent:
 ```
@@ -42,8 +45,19 @@ SSH into their instance:
 ssh root@${DEV_INSTANCE_PUBLIC_IP} -p ${DEV_INSTANCE_SSH_PORT}
 ```
 
+### Connect to your dev instance from VSCode:
+VSCode has an extension allows you to use SSH from the IDE into a remote server.  It will then give you a terminal on that remote server and it can sync files that are on that remote server into your IDE like you were working on the remote server locally.
+
+Here is the process on how to set that up:
+
+#### Install the VSCode Remote SSH extention:
+
+Install the "Remote - SSH" extension
+* On the left hand side of the IDE click on "Extensions"
+* Search for "Remote - SSH" and install this extension
+
+#### Configure VSCode to connect to a remote machine
 Add host into VScode:
-* Install the "Remote - SSH" extension
 * On the lower left of the VScode window click on "Open Remote Window"
 * Click on: Remote-SSH: Connect to Host...
 * + Add New SSH Host...
@@ -53,14 +67,13 @@ Add host into VScode:
 * Select the `/home/<home folder>/.ssh/config` file
 * Find this host:
 ```
-Host 10.10.10.10
-	HostName 10.10.10.10
+Host x.x.x.x
+	HostName x.x.x.x
 	User root
 	Port 20022
 	ForwardAgent yes
 ```
-* Rename `Host 10.10.10.10` to `Host my-dev-box` or a human recognizable name for yourself and save the file
-* Click on: Remote-SSH: Connect to Host...
+
 * Click on: Remote-SSH: Connect to Host...
 * Click on the host you just added and/or renamed.  A new VScode window will open up and it will connect to this host.
 * In the new window, click on Terminal->New Terminal
