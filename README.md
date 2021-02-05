@@ -72,7 +72,59 @@ While this project is geared toward running multiple isolated KinD cluster on a 
 
 ## Use cases
 
+### Why would you want to use a development box like this?
+Setting up a development environment is hard.  Everyone's machine is a little different and everyone likes to configure it a little differently.  Using a central development box like this, allows your developers to connect to this central machine where you have more control of how it is setup.  This helps you to get your developers productive faster.
 
+You can setup a container that has everything installed in it from developer's tools to specific libraries that you are using.  Each container can even have it's own Kubernetes cluster which means each developer has their own cluster and won't interfere with each other's work.
 
+### Use case - New developers
 
+I have:
+* 2 new developers
+* Both are going to start on some type of development that involves Kubernetes
+* They are both running Windows machine
+* Work in a location that makes downloading Golang libraries hard (restricted)
+* Not that familiar with Kubernetes and you don't want them to have to set it up locally
+* You don't want to play support and would rather have the developer connect to something that is all setup for them
+
+Kubernetes-development-environment-in-a-box is perfect for this use case.  You can setup a machine on AWS, GCP, or Azure and turn on an Ubuntu container for each of them.  These containers act more like a VM (see above for an explantion) which means it has a local isolated Docker daemon, you can start a KinD cluster, and install whatever you want into it without affecting the host machine or any other containers on this machine.
+
+The container you start for this developer is built from a Dockerfile and it has all of the tools and thing you want in it from the get go.  So if you wanted Golang 1.14.x it has it or if you want to use Golang 1.15.x, that is cool as well.
+
+With this setup, you can build a topology like this:
+```
+                                                             +---------------------------------------------------+
+                                                             |                                                   |
+                                                             |                                                   |
+ DeVeloper 1 local laptop                                    |                                                   |
++------------------------+                                   |                 Container 1                       |
+|* VSCode IDE            |                                   |            +----------------------------+         |
+|* Remote SSH extension  |           SSH Connection          |            |     * Ubuntu               |         |
+|                        +----------------------------------------------> |     * Docker               |         |
+|                        |                                   |            |     * Kubernetes           +------------>Internet
+|                        |                                   |            |     * Golang/Python/etc    |         |
++------------------------+                                   |            |     * SSH                  |         |
+                                                             |            |                            |         |
+                                                             |            +----------------------------+         |
+                                                             |                                                   |
+                                                             |                  Container 2                      |
+ DeVeloper 2 local laptop                                    |            +----------------------------+         |
++------------------------+                                   |            |     * Ubuntu               |         |
+| * VSCode IDE           |           SSH Connection          |            |     * Docker               +------------>Internet
+| * Remote SSH extension +----------------------------------------------> |     * Kubernetes KinD      |         |
+|                        |                                   |            |     * Golang/Python/etc    |         |
++------------------------+                                   |            |     * SSH                  |         |
+                                                             |            +----------------------------+         |
+                                                             |                                                   |
+                                                             |                                                   |
+                                                             |                                                   |
+                                                             |                                                   |
+                                                             |          Host Ubuntu system                       |
+                                                             |           (AWS/EC2, GCP, Azure)                   |
+                                                             +---------------------------------------------------+
+
+```
+* The developers runs VSCode locally on their laptops
+* They use their internet connection to SSH to a remote server
+* The remote server has a fully built and working environment with everything they need
 
