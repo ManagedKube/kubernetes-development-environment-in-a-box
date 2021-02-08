@@ -52,6 +52,8 @@ Here is the process on how to set that up:
 
 #### Install the VSCode Remote SSH extention:
 
+Doc: https://code.visualstudio.com/docs/remote/ssh
+
 Install the "Remote - SSH" extension
 * On the left hand side of the IDE click on "Extensions"
 * Search for "Remote - SSH" and install this extension
